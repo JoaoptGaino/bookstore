@@ -2,6 +2,7 @@ package com.joaoptgaino.bookstore.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Table(name = "book")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

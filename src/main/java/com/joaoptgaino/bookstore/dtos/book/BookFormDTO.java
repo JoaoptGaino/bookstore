@@ -22,6 +22,5 @@ public class BookFormDTO {
     @NotBlank(message = "summary is mandatory")
     private String summary;
 
-    @Size(min = 15, max = 15, message = "authorId size must be between 2 and 15")
     private UUID authorId;
 }
