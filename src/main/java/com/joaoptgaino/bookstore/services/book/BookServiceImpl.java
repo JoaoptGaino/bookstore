@@ -2,18 +2,22 @@ package com.joaoptgaino.bookstore.services.book;
 
 import com.joaoptgaino.bookstore.dtos.book.BookDTO;
 import com.joaoptgaino.bookstore.dtos.book.BookFormDTO;
+import com.joaoptgaino.bookstore.dtos.book.BookParamsDTO;
 import com.joaoptgaino.bookstore.entities.AuthorEntity;
 import com.joaoptgaino.bookstore.entities.BookEntity;
 import com.joaoptgaino.bookstore.repositories.AuthorRepository;
 import com.joaoptgaino.bookstore.repositories.BookRepository;
+import com.joaoptgaino.bookstore.repositories.specifications.BookSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.awt.print.Book;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,21 +29,21 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-
-    private final ModelMapper modelMapper;
     private final AuthorRepository authorRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public BookDTO create(BookFormDTO data) {
         BookEntity book = modelMapper.map(data, BookEntity.class);
-        BookEntity createdBook = bookRepository.save(book);
+        bookRepository.save(book);
 
-        return modelMapper.map(createdBook, BookDTO.class);
+        return modelMapper.map(book, BookDTO.class);
     }
 
     @Override
-    public Page<BookDTO> findAll(Pageable pageable) {
-        Page<BookEntity> books = bookRepository.findAll(pageable);
+    public Page<BookDTO> findAll(BookParamsDTO paramsDTO, Pageable pageable) {
+        Specification<BookEntity> specification = BookSpecification.create(paramsDTO);
+        Page<BookEntity> books = bookRepository.findAll(specification, pageable);
         return new PageImpl<>(books.getContent().stream().map(book -> modelMapper.map(book, BookDTO.class)).collect(Collectors.toList()));
 
     }
