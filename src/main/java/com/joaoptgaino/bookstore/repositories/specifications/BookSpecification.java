@@ -5,6 +5,8 @@ import com.joaoptgaino.bookstore.entities.BookEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
+import static io.micrometer.common.util.StringUtils.isNotBlank;
+
 @UtilityClass
 public class BookSpecification {
     public static Specification<BookEntity> create(BookParamsDTO bookParamsDTO) {
@@ -13,10 +15,20 @@ public class BookSpecification {
     }
 
     private static Specification<BookEntity> hasTitle(String title) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), title);
+        return (root, query, criteriaBuilder) -> {
+            if (isNotBlank(title)) {
+                return criteriaBuilder.like(root.get("title"), title);
+            }
+            return null;
+        };
     }
 
     private static Specification<BookEntity> hasSummary(String summary) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("summary"), summary);
+        return (root, query, criteriaBuilder) -> {
+            if (isNotBlank(summary)) {
+                return criteriaBuilder.like(root.get("summary"), summary);
+            }
+            return null;
+        };
     }
 }
