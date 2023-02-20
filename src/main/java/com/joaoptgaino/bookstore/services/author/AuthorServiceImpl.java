@@ -52,6 +52,7 @@ public class AuthorServiceImpl implements AuthorService {
         author.setId(id);
         author.setName(data.getName());
         author.setUpdatedAt(date);
+        authorRepository.save(author);
 
         return modelMapper.map(author, AuthorDTO.class);
     }

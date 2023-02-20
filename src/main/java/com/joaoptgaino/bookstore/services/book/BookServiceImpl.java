@@ -17,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.print.Book;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -69,6 +68,7 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(authorEntity);
         book.setUpdatedAt(date);
 
+        bookRepository.save(book);
         return modelMapper.map(book, BookDTO.class);
     }
 
