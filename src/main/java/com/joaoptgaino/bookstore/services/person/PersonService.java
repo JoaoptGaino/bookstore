@@ -1,5 +1,7 @@
 package com.joaoptgaino.bookstore.services.person;
 
+import com.joaoptgaino.bookstore.dtos.address.AddressDTO;
+import com.joaoptgaino.bookstore.dtos.address.AddressFormDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonFormDTO;
 import org.springframework.data.domain.Page;
@@ -17,4 +19,6 @@ public interface PersonService {
     PersonDTO update(UUID id, PersonFormDTO data);
 
     void delete(UUID id);
+
+    AddressDTO createAddresses(UUID id, AddressFormDTO data);
 }

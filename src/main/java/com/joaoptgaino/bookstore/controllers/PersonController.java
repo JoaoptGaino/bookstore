@@ -1,6 +1,8 @@
 package com.joaoptgaino.bookstore.controllers;
 
 
+import com.joaoptgaino.bookstore.dtos.address.AddressDTO;
+import com.joaoptgaino.bookstore.dtos.address.AddressFormDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonFormDTO;
 import com.joaoptgaino.bookstore.services.person.PersonService;
@@ -55,5 +57,11 @@ public class PersonController {
     ResponseEntity<PersonDTO> delete(@PathVariable(value = "id") UUID id) {
         personService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{id}/addresses")
+    ResponseEntity<AddressDTO> createAddresses(@PathVariable(value = "id") UUID id, @RequestBody @Valid AddressFormDTO data) {
+        AddressDTO address = personService.createAddresses(id, data);
+        return ResponseEntity.status(CREATED).body(address);
     }
 }

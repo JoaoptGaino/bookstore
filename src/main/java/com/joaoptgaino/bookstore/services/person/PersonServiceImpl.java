@@ -1,8 +1,12 @@
 package com.joaoptgaino.bookstore.services.person;
 
+import com.joaoptgaino.bookstore.dtos.address.AddressDTO;
+import com.joaoptgaino.bookstore.dtos.address.AddressFormDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonDTO;
 import com.joaoptgaino.bookstore.dtos.person.PersonFormDTO;
+import com.joaoptgaino.bookstore.entities.AddressEntity;
 import com.joaoptgaino.bookstore.entities.PersonEntity;
+import com.joaoptgaino.bookstore.repositories.AddressRepository;
 import com.joaoptgaino.bookstore.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +27,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
+
+    private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -41,6 +47,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTO findOne(UUID id) {
         PersonEntity person = personRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Person not found"));
+
         return modelMapper.map(person, PersonDTO.class);
     }
 
@@ -61,5 +68,16 @@ public class PersonServiceImpl implements PersonService {
         personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Person not found"));
         personRepository.deleteById(id);
+    }
+
+    @Override
+    public AddressDTO createAddresses(UUID id, AddressFormDTO data) {
+        PersonEntity person = personRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Person not found"));
+        AddressEntity address = modelMapper.map(data, AddressEntity.class);
+        address.setPerson(person);
+
+        addressRepository.save(address);
+        return modelMapper.map(address, AddressDTO.class);
     }
 }
