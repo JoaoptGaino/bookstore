@@ -17,7 +17,7 @@ public class BookSpecification {
     private static Specification<BookEntity> hasTitle(String title) {
         return (root, query, criteriaBuilder) -> {
             if (isNotBlank(title)) {
-                return criteriaBuilder.like(root.get("title"), title);
+                return criteriaBuilder.like(criteriaBuilder.upper(root.get("title")), "%" + title.toUpperCase() + "%");
             }
             return null;
         };
@@ -26,7 +26,7 @@ public class BookSpecification {
     private static Specification<BookEntity> hasSummary(String summary) {
         return (root, query, criteriaBuilder) -> {
             if (isNotBlank(summary)) {
-                return criteriaBuilder.like(root.get("summary"), summary);
+                return criteriaBuilder.like(criteriaBuilder.upper(root.get("summary")), "%" + summary.toUpperCase() + "%");
             }
             return null;
         };
